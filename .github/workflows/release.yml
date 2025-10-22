@@ -1,0 +1,16 @@
+name: Integration  
+
+on:                    
+  push:                 
+    branches: [ "main" ]
+
+jobs:  
+  deploy:   
+
+    runs-on: ubuntu-latest  
+
+    steps:   
+    - uses: actions/checkout@v4 
+    - run: docker build . -t jalves03/nest-app 
+    - run: echo "${{secrets.DOCKER_PASSWORD}}" | docker login -u ${{secrets.DOCKER_USERNAME}}
+    - run: docker push jalves03/nest-app 
