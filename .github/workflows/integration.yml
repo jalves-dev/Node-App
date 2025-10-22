@@ -1,0 +1,47 @@
+name: Integration   # YAML file name
+
+on:                     # This "on" block specifies WHEN we want to run this jobs
+  push:                   # On push in the main branch, run jobs
+    branches: [ "main" ]
+  pull_request:           # On pull requests in the main branch, run jobs
+    branches: [ "main" ]
+
+jobs:   # We specify the jobs we want to run
+  build:    # Name of the job (it can be anything)
+
+    runs-on: ubuntu-latest  # Runs on ubuntu (latest) server, hosted by GitHub
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x] # Will run tests in node version 18, 20 and 22
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:    # Steps we need to take in order to run this job
+    - uses: actions/checkout@v4 # We are on the main branch, in order to run tests in the new branch, we need to checkout to that branch. This is a repository provided by actions that does it for us
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4 # Again, an actions repository that help us setup a node-application (in this case)
+      with:
+        node-version: ${{ matrix.node-version }}    # Defines the node version. It's linked with the "strategy" block
+        cache: 'npm'    # Simple way of managing our packages
+    - run: npm i # Run command npm install 
+    - run: npm run build
+
+  unit-tests:    # Name unit test
+    runs-on: ubuntu-latest  
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x] 
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:  
+    - uses: actions/checkout@v4 
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4 
+      with:
+        node-version: ${{ matrix.node-version }}    
+        cache: 'npm'    
+    - run: npm i 
+    - run: npm run test
+
+# Test comment
