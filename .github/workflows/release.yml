@@ -12,5 +12,5 @@ jobs:
     steps:   
     - uses: actions/checkout@v4 
     - run: docker build . -t jalves03/nest-app 
-    - run: echo "${{secrets.DOCKER_PASSWORD}}" | docker login -u ${{secrets.DOCKER_USERNAME}}
+    - run: echo "${{secrets.DOCKER_PASSWORD}}" | docker login -u ${{secrets.DOCKER_USERNAME}} --password-stdin
     - run: docker push jalves03/nest-app 
