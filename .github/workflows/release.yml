@@ -1,0 +1,15 @@
+name: Release   
+
+on:                    
+  push:                   
+    branches: [ "main" ]
+
+jobs:  
+  deploy:    
+    runs-on: ubuntu-latest 
+
+    steps:   
+    - uses: actions/checkout@v5
+    - run: docker build . -t jalves03/nest-app 
+    - run: echo "${{secrets.DOCKER_PASSWORD}}" | docker login -u ${{secrets.DOCKER_USERNAME}} --password stdin # Provides the password, and then runs the command to login into Docker Hub
+    - run: docker push jalves03/nest-app
